@@ -1,0 +1,127 @@
+<Window x:Class="Whack911.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CONSOLE SETTINGS" Height="720" Width="480"
+        Background="#0A0E14" FontFamily="Consolas"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PanelBg" Color="#12181F"/>
+        <SolidColorBrush x:Key="PanelBorder" Color="#2A3542"/>
+        <SolidColorBrush x:Key="AmberBrush" Color="#FFB000"/>
+        <SolidColorBrush x:Key="CyanBrush" Color="#22D3EE"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#E4EAF0"/>
+        <SolidColorBrush x:Key="TextDim" Color="#5C6B7A"/>
+
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextDim}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource PanelBg}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="CaretBrush" Value="{StaticResource AmberBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="Background" Value="{StaticResource PanelBg}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="CaretBrush" Value="{StaticResource AmberBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{StaticResource PanelBg}"/>
+            <Setter Property="Foreground" Value="#0A0E14"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+
+        <Style x:Key="DialogButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="PBX &amp; AUDIO CONFIGURATION" Foreground="{StaticResource AmberBrush}"
+                   FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="PBX SERVER / HOST" Style="{StaticResource FieldLabel}"/>
+            <TextBox x:Name="ServerBox"/>
+
+            <TextBlock Text="PORT" Style="{StaticResource FieldLabel}"/>
+            <TextBox x:Name="PortBox"/>
+
+            <TextBlock Text="EXTENSION / USERNAME" Style="{StaticResource FieldLabel}"/>
+            <TextBox x:Name="UsernameBox"/>
+
+            <TextBlock Text="SECRET / PASSWORD" Style="{StaticResource FieldLabel}"/>
+            <PasswordBox x:Name="PasswordBox"/>
+
+            <TextBlock Text="AUDIO OUTPUT (SPEAKER)" Style="{StaticResource FieldLabel}"/>
+            <ComboBox x:Name="OutputDeviceCombo" DisplayMemberPath="Name"/>
+
+            <TextBlock Text="AUDIO INPUT (MICROPHONE)" Style="{StaticResource FieldLabel}"/>
+            <ComboBox x:Name="InputDeviceCombo" DisplayMemberPath="Name"/>
+
+            <TextBlock Text="OUTBOUND DIAL PREFIX (optional)" Style="{StaticResource FieldLabel}"/>
+            <TextBox x:Name="DialPrefixBox"/>
+
+            <TextBlock Text="RINGTONE" Style="{StaticResource FieldLabel}"/>
+            <ComboBox x:Name="RingtoneCombo" DisplayMemberPath="Name"/>
+
+            <TextBlock Text="KEYBINDS (click a field, then press a key)" Style="{StaticResource FieldLabel}" Margin="0,8,0,4"/>
+            <ItemsControl x:Name="KeybindList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="130"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Label}" Foreground="#E4EAF0" FontSize="12" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding KeyDisplay, Mode=OneWay}"
+                                     IsReadOnly="True" Background="#0A0E14" Foreground="#22D3EE"
+                                     BorderBrush="#2A3542" BorderThickness="1" Padding="8,4"
+                                     PreviewKeyDown="Keybind_PreviewKeyDown" Tag="{Binding Action}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="CANCEL" Style="{StaticResource DialogButton}"
+                    Background="{StaticResource PanelBg}" Foreground="{StaticResource TextDim}"
+                    Click="Cancel_Click" Margin="0,0,10,0"/>
+            <Button Content="SAVE &amp; APPLY" Style="{StaticResource DialogButton}"
+                    Background="{StaticResource CyanBrush}" Foreground="#0A0E14"
+                    Click="Save_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
