@@ -1,4 +1,4 @@
-﻿using SIPSorcery.SIP;
+using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
 using SIPSorcery.Media;
 using SIPSorceryMedia.Windows;
@@ -392,15 +392,13 @@ namespace Whack911
 
             if (result)
             {
-                Log($"Line {lineIndex + 1}: transfer accepted - releasing line.");
-                // Don't wait on the server to send us a BYE for the old leg -
-                // free the line immediately so the console reflects reality
-                // instead of showing a stale "on call" state.
-                if (line.Agent.IsCallActive)
-                {
-                    line.Agent.Hangup();
-                }
-                ResetLine(line);
+                Log($"Line {lineIndex + 1}: transfer accepted, connecting far end...");
+                // Do NOT hang up here. "result = true" only means the REFER was
+                // accepted (202) - the actual transfer may still be in progress.
+                // Hanging up our own leg immediately was aborting the transfer
+                // before the PBX finished bridging the call. The PBX will send
+                // us a proper BYE once the transfer genuinely completes, which
+                // fires OnCallHungup and resets this line normally.
             }
             else
             {
