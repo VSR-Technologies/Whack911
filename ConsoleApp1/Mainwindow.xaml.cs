@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -231,6 +231,7 @@ namespace Whack911
             if (string.IsNullOrEmpty(dest) || _sip == null) return;
             await _sip.BlindTransferAsync(_selectedLine, dest);
             TransferBox.Text = "";
+            Keyboard.ClearFocus();
         }
 
         // ===== Local dial (no prefix) =====
@@ -259,6 +260,7 @@ namespace Whack911
 
             await _sip.CallAsync(targetLine, ext, applyPrefix: false);
             LocalDialBox.Text = "";
+            Keyboard.ClearFocus();
         }
 
         // ===== Outbound dial (prefix applied) =====
@@ -287,6 +289,7 @@ namespace Whack911
 
             await _sip.CallAsync(targetLine, number, applyPrefix: true);
             OutboundDialBox.Text = "";
+            Keyboard.ClearFocus();
         }
 
         /// <summary>Line 1 is always preferred unless busy, regardless of UI selection.</summary>
